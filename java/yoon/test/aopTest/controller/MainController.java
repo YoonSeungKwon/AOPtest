@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import yoon.test.aopTest.request.LoginDto;
 import yoon.test.aopTest.request.MemberDto;
 import yoon.test.aopTest.response.MemberResponse;
-import yoon.test.aopTest.response.Message;
+import yoon.test.aopTest.response.ResponseMessage;
 import yoon.test.aopTest.service.MemberService;
 
 @RestController
@@ -19,38 +19,38 @@ public class MainController {
     private final MemberService memberService;
 
     @GetMapping("/")
-    public ResponseEntity<Message> home(){
-        Message message = new Message();
+    public ResponseEntity<ResponseMessage> home(){
+        ResponseMessage responseMessage = new ResponseMessage();
 
-        message.setStatus(HttpStatus.OK);
-        message.setMessage("Main Page");
-        message.setData("Home");
+        responseMessage.setStatus(HttpStatus.OK);
+        responseMessage.setMessage("Main Page");
+        responseMessage.setData("Home");
 
-        return ResponseEntity.ok(message);
+        return ResponseEntity.ok(responseMessage);
     }
 
     @PostMapping("/")
-    public ResponseEntity<Message> login(@RequestBody @Validated MemberDto dto){
-        Message message = new Message();
+    public ResponseEntity<ResponseMessage> login(@RequestBody @Validated MemberDto dto){
+        ResponseMessage responseMessage = new ResponseMessage();
         MemberResponse result = memberService.join(dto);
 
-        message.setStatus(HttpStatus.OK);
-        message.setMessage("Register Success");
-        message.setData(result);
+        responseMessage.setStatus(HttpStatus.OK);
+        responseMessage.setMessage("Register Success");
+        responseMessage.setData(result);
 
-        return ResponseEntity.ok(message);
+        return ResponseEntity.ok(responseMessage);
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Validated LoginDto dto){
-        Message message = new Message();
+        ResponseMessage responseMessage = new ResponseMessage();
         MemberResponse result = memberService.login(dto);
 
-        message.setStatus(HttpStatus.OK);
-        message.setMessage("Login Success");
-        message.setData(result);
+        responseMessage.setStatus(HttpStatus.OK);
+        responseMessage.setMessage("Login Success");
+        responseMessage.setData(result);
 
-        return ResponseEntity.ok(message);
+        return ResponseEntity.ok(responseMessage);
     }
 
     @GetMapping("/user")

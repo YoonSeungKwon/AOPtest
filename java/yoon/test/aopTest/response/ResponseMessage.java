@@ -4,7 +4,7 @@ import lombok.Data;
 import org.springframework.http.HttpStatus;
 
 @Data
-public class Message {
+public class ResponseMessage {
 
     private HttpStatus status;
 
@@ -12,7 +12,7 @@ public class Message {
 
     private Object data;
 
-    public Message(){
+    public ResponseMessage(){
         this.status = HttpStatus.BAD_REQUEST;
         this.message = null;
         this.data = null;
