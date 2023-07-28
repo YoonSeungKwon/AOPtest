@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import yoon.test.aopTest.config.jwt.JwtProvider;
 import yoon.test.aopTest.domain.Members;
 import yoon.test.aopTest.enums.Role;
 import yoon.test.aopTest.repository.MemberRepository;

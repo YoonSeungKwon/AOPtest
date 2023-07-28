@@ -1,15 +1,21 @@
 package yoon.test.aopTest.controller;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import yoon.test.aopTest.config.jwt.JwtProvider;
 import yoon.test.aopTest.request.LoginDto;
 import yoon.test.aopTest.request.MemberDto;
 import yoon.test.aopTest.response.MemberResponse;
 import yoon.test.aopTest.response.ResponseMessage;
 import yoon.test.aopTest.service.MemberService;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,6 +23,8 @@ import yoon.test.aopTest.service.MemberService;
 public class MainController {
 
     private final MemberService memberService;
+    private final JwtProvider jwtProvider;
+
 
     @GetMapping("/")
     public ResponseEntity<ResponseMessage> home(){
@@ -42,7 +50,7 @@ public class MainController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody @Validated LoginDto dto){
+    public ResponseEntity<?> login(@RequestBody @Validated LoginDto dto, HttpServletResponse response){
         ResponseMessage responseMessage = new ResponseMessage();
         MemberResponse result = memberService.login(dto);
 
@@ -50,18 +58,24 @@ public class MainController {
         responseMessage.setMessage("Login Success");
         responseMessage.setData(result);
 
+        Map<String, Object> map = new HashMap<>();
+        map.put("email", dto.getEmail());
+        String jwt = jwtProvider.createToken(map);
+
+        response.setHeader("Authorization", jwt);
+
         return ResponseEntity.ok(responseMessage);
     }
 
     @GetMapping("/user")
     public ResponseEntity<?> userPage(){
-
-        return null;
+        System.out.println("user");
+        return ResponseEntity.ok(SecurityContextHolder.getContext().getAuthentication().getAuthorities());
     }
 
     @GetMapping("/admin")
     public ResponseEntity<?> adminPage(){
-
-        return null;
+        System.out.println("admin");
+        return ResponseEntity.ok(SecurityContextHolder.getContext().getAuthentication().getAuthorities());
     }
 }
